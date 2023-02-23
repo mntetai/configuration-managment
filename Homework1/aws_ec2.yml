@@ -1,0 +1,14 @@
+plugin: amazon.aws.aws_ec2
+iam_role_arn: arn:aws:iam::072942424548:role/EC2_READ_ONLY
+
+regions:
+  - us-east-1
+
+hostnames:
+  - tag:Name=Node0,Name=Node1
+
+compose:
+  ansible_host: private_ip_address
+  ansible_user: ubuntu
+  ansible_private_ssh_key_file: ansible_key_8.pem
+  
