@@ -1,0 +1,4 @@
+ansible -i inventory web -m user -a "name=opsschool password=0ps$ch00l home=/opsschool" -b
+ansible -i inventory web -m file -a "dest=/etc/opsschool mode=755 state=directory" -b
+ansible -i inventory web -m file -a "dest=~/opsschool/ansible mode=755 state=directory"
+ansible -i inventory web -m file -a "dest=~/opsschoolmode=755 state=directory"
