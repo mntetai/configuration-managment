@@ -1,0 +1,60 @@
+---
+- hosts: web
+  become: true
+
+  tasks:
+  
+  - name: Creating an empty file
+    file:
+      path: "/home/ubuntu/text.txt"
+      state: touch
+      mode: '0777'
+
+  - name: write contents to the file
+    copy:
+      dest: "/home/ubuntu/text.txt"
+      content: |
+        I am a text file I exist
+  
+
+  - name: Create a tar.gz archive of a single file
+    community.general.archive:
+      path: "/home/ubuntu/text.txt"
+      dest: "/home/ubuntu/text.tar.gz"
+      format: gz
+      force_archive: true
+
+  - name: delete file
+    file:
+      path: "/home/ubuntu/text.txt"
+      state: absent
+
+  - name: Download content
+    get_url:
+      url:  http://icanhazip.com
+      dest: /home/ubuntu/index.html
+      mode: '0440'
+
+  - name: create directory /etc/opsschool
+    file:
+      dest: /etc/opsschool
+      mode: '0755'
+      state: directory
+  
+  - name: create directory ~/opsschool
+    file:
+      dest: ~/opsschool
+      mode: '0755'
+      state: directory
+  
+  - name: create directory ~/opsschool/ansible
+    file:
+      dest: ~/opsschool/ansible
+      mode: '0755'
+      state: directory
+
+  - name: create user opsschool with home /opsschool
+    user:
+      name: opsschool
+      password: 0ps$ch00l
+      home: /opsschool             
