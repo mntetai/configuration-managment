@@ -1,0 +1,2 @@
+ansible_user: ubuntu
+ansible_host: private_ip_address
