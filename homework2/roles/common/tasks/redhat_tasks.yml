@@ -1,0 +1,41 @@
+---
+    - name : add repository with dnf
+      ansible.builtin.command: 
+        cmd: sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+      when: ansible_facts['os_family'] == "RedHat"  
+
+    - name: build cache for docker repository
+      ansible.builtin.command:
+        cmd: sudo dnf makecache
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: install docker ce
+      dnf:
+        name: docker-ce 
+        nobest: true
+        state: present 
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Package Installer For Python3 
+      package:
+        name: python3
+        state: present
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Installing python library for the Docker Remote API
+      pip:
+        name: docker-py
+      when: ansible_facts['os_family'] == "RedHat"  
+    
+    - name: Create "docker" group
+      group:
+        name: docker
+        state: present
+      when: ansible_facts['os_family'] == "RedHat"  
+
+    - name: Add remote "ec2-user" user to "docker" group
+      user:
+        name: ec2-user
+        group: docker
+        append: yes
+      when: ansible_facts['os_family'] == "RedHat"

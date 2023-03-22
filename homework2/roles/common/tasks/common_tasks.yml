@@ -1,0 +1,32 @@
+---
+    - name: Pull default Docker image
+      community.docker.docker_image:
+        name: "{{ default_container_image }}"
+        source: pull
+
+    - name: Create default containers
+      community.docker.docker_container:
+        name: "{{ default_container_name }}{{ item }}"
+        image: "{{ default_container_image }}"
+        command: "{{ default_container_command }}"
+        state: present
+      with_sequence: count={{ container_count }}
+
+    - name: Restart Docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+      notify: 
+        - Restart_docker 
+
+    - name: run nginx docker container 
+      docker_container:
+        name: "{{ default_container_name }}"
+        image: "{{ default_container_image }}"
+        state: started
+        restart: yes
+        ports:
+          - "8080:80"
+        detach : yes
+    

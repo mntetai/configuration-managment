@@ -1,0 +1,25 @@
+plugin: amazon.aws.aws_ec2
+iam_role_arn: arn:aws:iam::072942424548:role/EC2_READ_ONLY
+
+regions:
+  - us-east-1
+
+keyed_groups:
+  # add hosts to tag_Name_value groups for each aws_ec2 host's tags.Name variable.
+  - key: tags.OS
+    prefix: tag_name_
+    separator: ""
+filters:
+  tag:OS:
+    - ubuntu
+    - RedHat
+    
+groups:
+  # add hosts to the group ubuntu or redhat
+  ubuntu: "'ubuntu' in (tags|list)"
+  redhat: "'redhat' in (tags|list)"
+
+compose:
+  ansible_host: private_ip_address
+
+  

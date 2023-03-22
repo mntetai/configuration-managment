@@ -1,0 +1,58 @@
+---
+    - name: Install aptitude
+      apt:
+        name: aptitude
+        state: latest
+        update_cache: true
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Install required system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+      when: ansible_facts['os_family'] == "Debian"
+    
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Create "docker" group
+      group:
+        name: docker
+        state: present
+      when: ansible_facts['os_family'] == "Debian"  
+
+    - name: Add remote "ubuntu" user to "docker" group
+      user:
+        name: ubuntu
+        group: docker
+        append: yes
+      when: ansible_facts['os_family'] == "Debian"

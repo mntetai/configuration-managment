@@ -1,0 +1,8 @@
+---
+- import_tasks: facts_tasks.yml
+- import_tasks: install-pip.yml
+- import_tasks: ubuntu_tasks.yml
+  when: ansible_facts['os_family'] == "Debian"
+- import_tasks: redhat_tasks.yml
+  when: ansible_facts['os_family'] == "RedHat"
+- import_tasks: common_tasks.yml  
